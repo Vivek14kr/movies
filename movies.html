@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #toppart {
+        margin-left: 41%;
+        width: fit-content;
+    }
+
+    #title {
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+        color: aqua;
+    }
+
+    #divelement {
+        margin-top: 3%;
+    }
+
+    #diverrelement {
+        margin-top: 3%;
+    }
+</style>
+
+<body>
+    <div id="toppart">
+        <p id="title">Search Movie</p>
+        <input type="text" id="movie" placeholder="Enter Movie">
+        <button onclick="getmovie()">Get Movie</button>
+    </div>
+    <div id="data"></div>
+
+</body>
+
+</html>
+
+<script>
+    //async await
+    //fetch
+    //api
+    //82b4758ee28c529c03c4fd387f9b8bd3
+
+    let container = document.getElementById("data")
+
+    async function getmovie() {
+
+
+        let city = document.getElementById("movie").value;
+
+
+        var res = await fetch(
+            'http://www.omdbapi.com/?t=' + city + '&apikey=5da8980e'
+        );
+        let data = await res.json();
+        if (data.Error != undefined) {
+            showerror()
+        } else {
+
+            showWeather(data)
+        }
+    }
+
+    function showerror() {
+        container.innerHTML = null;
+        let div = document.createElement("div")
+        div.id = "diverrelement"
+        div.style.textAlign = "center"
+        div.style.position = "relative"
+        div.style.width = "fix-content"
+        let img = document.createElement("img");
+        img.src = "https://user-images.githubusercontent.com/24848110/33519396-7e56363c-d79d-11e7-969b-09782f5ccbab.png"
+        div.append(img)
+        container.append(div)
+    }
+
+    function showWeather(weather) {
+        container.innerHTML = null;
+        let div = document.createElement("div")
+        div.id = "divelement"
+        div.style.textAlign = "center"
+        div.style.position = "relative"
+        div.style.width = "fix-content"
+
+        let img = document.createElement("img")
+        img.src = weather.Poster
+        let name = document.createElement("p")
+
+        name.innerText = weather.Title
+
+        let temp = document.createElement("p")
+
+        temp.innerText = "Release Date:" + weather.Released
+        let rating = document.createElement("p");
+        rating.innerText = "imdb:" + weather.imdbRating;
+
+        var ratingimdb = weather.imdbRating
+
+        if (ratingimdb > 8.5) {
+            var recomed = document.createElement("p");
+            recomed.innerText = "RECOMMENDED";
+            recomed.style.fontWeight = "bold";
+            recomed.style.color = "red";
+            recomed.style.position = "absolute";
+            recomed.style.fontSize = "30px";
+            // recomed.style.top= "70%";
+            recomed.style.left = "42%"
+            recomed.style.bottom = "15%"
+            // recomed.style.textAlign = "center"
+            recomed.style.backgroundColor = "yellow"
+
+
+            div.append(img, recomed, name, temp, rating);
+            container.append(div)
+            return;
+
+        }
+
+        div.append(img, name, temp, rating);
+        container.append(div)
+    }
+</script>
